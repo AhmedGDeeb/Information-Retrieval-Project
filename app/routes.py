@@ -4,7 +4,7 @@ import hashlib
 import sqlite3
 import re
 
-from app import app
+from code import app
 from flask import render_template
 from flask import request, jsonify, redirect
 import flask
