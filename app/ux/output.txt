@@ -1,0 +1,6 @@
+ranking of the documents
+document1 rank is 1
+document2  rank is 2
+document3 rank is 3
+document4  rank is 4
+document1 is the most relevant document for the given query

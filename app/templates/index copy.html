@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Google Search find anything UI Design">
+    <title>Google Search | Search anything</title>
+    <link rel="stylesheet" href={{ url_for('static', filename='css/style.css') }}>
+</head>
+<body>
+    <div style="display: flex; flex-flow: column; align-items: center;">
+            <!--<img src={{ url_for('static', filename='Img/google-logo-9808.png') }} id="google-img">-->
+           <div>
+                <form method="POST" enctype="multipart/form-data" action="/upload">
+                    <input type="file" name="files" multiple="">
+                    <input type="submit" value="add">
+                </form>
+            </div>
+            <div>
+                <label>Choose Data files</label>
+                <input type="file" id="ctrl" webkitdirectory directory multiple onclick="Show()">
+                <script>
+                    function Show(){
+                        console.log(document.getElementById("ctrl"))
+                    }
+                </script>
+            </div>
+            <div>
+                <input id="datat-file-input" type="file" text="enter data folder path" dirname="folder" onkeypress="handleKeyPress(event)">
+            </div>
+           </div>
+            <div>
+                <input type="file" onChange={onChange} />
+                <script>
+                const onChange = (event) => {
+                const value = event.target.value;
+                
+                // this will return C:\fakepath\somefile.ext
+                console.log(value);
+                
+                const files = event.target.files;
+                
+                //this will return an ARRAY of File object
+                console.log(files);
+                }
+                </script>
+            </div>
+            <div>
+                <input type="button" value="choose dir" onclick="getDir()">
+                <script>
+                    async function getDir() {
+                const dirHandle = await window.showDirectoryPicker();
+    
+                console.log(dirHandle)
+                // run code for dirHandle
+                }
+                </script>
+            </div>
+            <!--
+            <svg id="search-icon" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" onclick="handleMuoseClick(event)">
+                <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+            </svg>
+            -->
+            <div style="display: flex; justify-content: space-between;">
+               <div>
+                <input type="radio"><label>عربي</label>
+                <input type="radio"><label>English</label>
+               </div>
+               <div>
+                <select>
+                    <option>Boolean Model</option>
+                    <option>Extended Boolean Model</option>
+                    <option>Vector Model</option>
+                </select>
+               </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <!-- alert -->
+    <div class="alert">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+        This is an alert box.
+    </div>
+    <style>
+        .alert {
+          opacity: 1;
+          transition: opacity 0.6s; /* 600ms to fade out */
+        }
+        </style>
+        
+        <script>
+        // Get all elements with class="closebtn"
+        var close = document.getElementsByClassName("closebtn");
+        var i;
+        
+        // Loop through all close buttons
+        for (i = 0; i < close.length; i++) {
+          // When someone clicks on a close button
+          close[i].onclick = function(){
+        
+            // Get the parent of <span class="closebtn"> (<div class="alert">)
+            var div = this.parentElement;
+        
+            // Set the opacity of div to 0 (transparent)
+            div.style.opacity = "0";
+        
+            // Hide the div after 600ms (the same amount of milliseconds it takes to fade out)
+            setTimeout(function(){ div.style.display = "none"; }, 600);
+          }
+        }
+        </script>
+        
+    <!-- ajax library -->
+    <script src={{ url_for('static', filename='js/jquery.min.js') }}></script>
+    <script type="text/javascript">
+        
+        function handleKeyPress(e){
+            var key=e.keyCode || e.which;
+            if (key==13){
+                console.log("handling enter press...");
+                submit();
+            }
+        }
+
+        function handleMuoseClick(e) {
+            console.log("handling mouse click...");
+            submit();
+        }
+
+        function submit(){
+            var content = document.getElementById("search-input").value;
+            console.log("sumbitting content: " + content);
+            $.ajax({
+                type: "POST",
+                url:"{{ url_for('search', q=content) }}",
+                data: JSON.stringify({
+                    "model" : "model name",
+                    "Data" : "Path to Data Files",
+                    "language" : "English | Arabic",
+                    "q" : content
+                }),
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(result) {
+                    console.log("Result:");
+                    console.log(result);
+                } 
+            });
+        }
+
+    </script>
+</body>
+
+</html>

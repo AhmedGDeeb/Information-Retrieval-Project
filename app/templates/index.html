@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Google Search find anything UI Design">
+    <title>Mark Search | Search anything</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index-style.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('config') }}">
+            <!-- add files -->
+            <div id="files-div">
+                <label for="files-input">Choose Corpus files:</label>
+                <input id="files-input" type="file" name="files" multiple="" accept="{{ ALLOWED_EXTENSIONS }}" required>
+            </div>
+            <div>
+                <input type="checkbox" id="user-default-db-checkbox" name="use_default_db">
+                <label for="user-default-db-checkbox">Use Database:</label>
+                <div id="database-select-div" hidden>
+                    <select name="database-path">
+                        {% for db in databases %}
+                        <option value="{{ db }}" {% if loop.last %}selected{% endif %}>{{ db }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <script>
+                    const useDefaultDbCheckbox = document.getElementById("user-default-db-checkbox");
+                    useDefaultDbCheckbox.addEventListener("change", () => {
+                        const filesInput = document.getElementById("files-input");
+                        filesInput.required = !filesInput.required;
+                        const filesDiv = document.getElementById("files-div");
+                        filesDiv.hidden = !filesDiv.hidden;
+                        const databasesSelectDiv = document.getElementById("database-select-div");
+                        databasesSelectDiv.hidden = !databasesSelectDiv.hidden;
+                    });
+                </script>
+            </div>
+            <!-- choose language -->
+            <div class="language-selection">
+                {% for language in SUPPORTED_LANGUAGES %}
+                <div style="display: flex; align-items: baseline;">
+                    <input id="{{ language['value'] }}" type="radio" name="language" value="{{ language['value'] }}" {% if loop.first %}checked{% endif %}>
+                    <label for="{{ language['value'] }}">{{ language['text'] }}</label>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="model-selection">
+                <label for="model">Select Model:</label>
+                <select id="model" name="model">
+                    {% for model in SUPPORTED_MODELS %}
+                        <option value="{{ model['value'] }}" {% if loop.first %}selected{% endif %}>{{ model['text'] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="submit-button">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
